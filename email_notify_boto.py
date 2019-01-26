@@ -85,22 +85,22 @@ def send_email(body_text, subject):
         print(response['MessageId'])
 
 def check_nyu():
-    url = "https://m.albert.nyu.edu/app/catalog/classsection/NYUNV/1188/22604"
+    url = "https://m.albert.nyu.edu/app/catalog/classsection/NYUNV/1194/25128"
 
     r  = requests.get(url)
 
     data = r.text
 
     soup = BeautifulSoup(data, "html.parser")
-    send_email("waitlist open", "waitlist open")
 
     for link in soup.find_all(text="Closed"):
+        print(link)
         if link == "Closed":
             timestr = time.strftime("%Y%m%d-%H%M%S")
-            with open("/home/ubuntu/Code/nyu_scraper/test.txt", "a") as myfile:
+            with open("/home/ubuntu/nyu_scraper/test.txt", "a") as myfile:
                 myfile.write("{} : CLOSED\n".format(timestr))
         else:
-            with open("/home/ubuntu/Code/nyu_scraper/test.txt", "a") as myfile:
+            with open("/home/ubuntu/nyu_scraper/test.txt", "a") as myfile:
                 myfile.write("{} : OPEN\n".format(timestr))
             send_email("waitlist open", "waitlist open")
 
