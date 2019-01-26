@@ -96,12 +96,12 @@ def check_nyu():
 
     for link in soup.find_all(text="Closed"):
         if link == "Closed":
-        timestr = time.strftime("%Y%m%d-%H%M%S")
-        with open("/home/ubuntu/Code/nyu_scraper/test.txt", "a") as myfile:
-            myfile.write("{} : CLOSED\n".format(timestr))
+            timestr = time.strftime("%Y%m%d-%H%M%S")
+            with open("/home/ubuntu/Code/nyu_scraper/test.txt", "a") as myfile:
+                myfile.write("{} : CLOSED\n".format(timestr))
         else:
-        with open("/home/ubuntu/Code/nyu_scraper/test.txt", "a") as myfile:
-            myfile.write("{} : OPEN\n".format(timestr))
-        send_email("waitlist open", "waitlist open")
+            with open("/home/ubuntu/Code/nyu_scraper/test.txt", "a") as myfile:
+                myfile.write("{} : OPEN\n".format(timestr))
+            send_email("waitlist open", "waitlist open")
 
 check_nyu()
