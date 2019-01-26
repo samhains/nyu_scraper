@@ -48,41 +48,41 @@ client = boto3.client('ses',region_name=AWS_REGION)
 
 def send_email(body_text, subject):
 # Try to send the email.
-	try:
-	    #Provide the contents of the email.
-	    response = client.send_email(
-		Destination={
-		    'ToAddresses': [
-			RECIPIENT,
-		    ],
-		},
-		Message={
-		    'Body': {
-			'Html': {
-			    'Charset': CHARSET,
-			    'Data': BODY_HTML,
-			},
-			'Text': {
-			    'Charset': CHARSET,
-			    'Data': body_text,
-			},
-		    },
-		    'Subject': {
-			'Charset': CHARSET,
-			'Data': subject,
-		    },
-		},
-		Source=SENDER,
-		# If you are not using a configuration set, comment or delete the
-		# following line
-		# ConfigurationSetName=CONFIGURATION_SET,
-	    )
-	# Display an error if something goes wrong.
-	except ClientError as e:
-	    print(e.response['Error']['Message'])
-	else:
-	    print("Email sent! Message ID:"),
-	    print(response['MessageId'])
+    try:
+        #Provide the contents of the email.
+        response = client.send_email(
+        Destination={
+            'ToAddresses': [
+            RECIPIENT,
+            ],
+        },
+        Message={
+            'Body': {
+            'Html': {
+                'Charset': CHARSET,
+                'Data': BODY_HTML,
+            },
+            'Text': {
+                'Charset': CHARSET,
+                'Data': body_text,
+            },
+            },
+            'Subject': {
+            'Charset': CHARSET,
+            'Data': subject,
+            },
+        },
+        Source=SENDER,
+        # If you are not using a configuration set, comment or delete the
+        # following line
+        # ConfigurationSetName=CONFIGURATION_SET,
+        )
+    # Display an error if something goes wrong.
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+    else:
+        print("Email sent! Message ID:"),
+        print(response['MessageId'])
 
 def check_nyu():
     url = "https://m.albert.nyu.edu/app/catalog/classsection/NYUNV/1188/22604"
@@ -92,15 +92,16 @@ def check_nyu():
     data = r.text
 
     soup = BeautifulSoup(data, "html.parser")
+    send_email("waitlist open", "waitlist open")
 
     for link in soup.find_all(text="Closed"):
         if link == "Closed":
-		timestr = time.strftime("%Y%m%d-%H%M%S") 
-		with open("/home/ubuntu/Code/nyu_scraper/test.txt", "a") as myfile:     
-			myfile.write("{} : CLOSED\n".format(timestr))
+        timestr = time.strftime("%Y%m%d-%H%M%S")
+        with open("/home/ubuntu/Code/nyu_scraper/test.txt", "a") as myfile:
+            myfile.write("{} : CLOSED\n".format(timestr))
         else:
-		with open("/home/ubuntu/Code/nyu_scraper/test.txt", "a") as myfile:     
-			myfile.write("{} : OPEN\n".format(timestr))
-		send_email("waitlist open", "waitlist open")
+        with open("/home/ubuntu/Code/nyu_scraper/test.txt", "a") as myfile:
+            myfile.write("{} : OPEN\n".format(timestr))
+        send_email("waitlist open", "waitlist open")
 
 check_nyu()
